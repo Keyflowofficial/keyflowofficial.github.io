@@ -51,17 +51,17 @@
       position: relative;
       z-index: 2;
       width: 98vw;
-      max-width: 1220px;
+      max-width: 1240px;
       display: grid;
-      grid-template-columns: 180px 1fr 180px;
+      grid-template-columns: 185px 1fr 185px;
       gap: 16px;
       align-items: center;
     }
 
-    .panel { display: flex; flex-direction: column; gap: 14px; }
+    .panel { display: flex; flex-direction: column; gap: 13px; }
 
     .mode-btn {
-      min-height: 78px;
+      min-height: 73px;
       border: 0;
       border-radius: 24px;
       cursor: pointer;
@@ -87,8 +87,8 @@
     .main { text-align: center; }
 
     h1 {
-      font-size: 48px;
-      margin: 0 0 12px;
+      font-size: 46px;
+      margin: 0 0 10px;
       letter-spacing: 2px;
       color: var(--accent);
       text-shadow: 0 0 28px var(--glow);
@@ -96,23 +96,40 @@
 
     .hud {
       display: grid;
-      grid-template-columns: repeat(4,1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+      grid-template-columns: repeat(6,1fr);
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .hud div {
-      padding: 13px;
-      border-radius: 18px;
+      padding: 11px 8px;
+      border-radius: 17px;
       background: var(--panel);
       backdrop-filter: blur(12px);
       font-weight: 900;
+      font-size: 13px;
       box-shadow: inset 0 0 20px color-mix(in srgb, var(--glow) 22%, transparent);
+    }
+
+    .xpbar {
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,.15);
+      margin-bottom: 13px;
+      box-shadow: inset 0 0 12px rgba(0,0,0,.4);
+    }
+
+    #xpFill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--glow));
+      transition: .25s ease;
     }
 
     .screen {
       height: 104px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       border-radius: 30px;
       background: color-mix(in srgb, var(--glow) 16%, transparent);
       display: flex;
@@ -123,7 +140,7 @@
     }
 
     #message {
-      font-size: 27px;
+      font-size: 26px;
       font-weight: 950;
       color: var(--accent);
       text-shadow: 0 0 20px var(--glow);
@@ -174,14 +191,15 @@
 
     .key.pressed {
       transform: translateY(9px) scale(.96,.86);
-      filter: saturate(1.35) brightness(.95);
+      filter: saturate(1.5) brightness(.92);
       box-shadow:
-        inset 0 16px 24px rgba(0,0,0,.55),
+        inset 0 18px 26px rgba(0,0,0,.6),
         0 2px 0 color-mix(in srgb, var(--key2) 70%, #000);
     }
 
     .key.target-key { animation: pulse .65s infinite alternate; }
     .key.danger-key { animation: danger .55s infinite alternate; }
+    .key.bonus-key { animation: bonus .45s infinite alternate; }
 
     @keyframes pulse {
       from { filter: brightness(1); box-shadow: 0 0 16px var(--glow), 0 10px 0 color-mix(in srgb, var(--key2) 70%, #000); }
@@ -191,6 +209,11 @@
     @keyframes danger {
       from { box-shadow: 0 0 14px #ff3b1f, 0 10px 0 #5c1800; }
       to { box-shadow: 0 0 42px #ff1a00, 0 10px 0 #5c1800; }
+    }
+
+    @keyframes bonus {
+      from { transform: scale(1); box-shadow: 0 0 15px #fff, 0 10px 0 #5c1800; }
+      to { transform: scale(1.08); box-shadow: 0 0 50px #fff, 0 10px 0 #5c1800; }
     }
 
     .particle {
@@ -220,7 +243,7 @@
 
     .modal-box {
       width: 90%;
-      max-width: 680px;
+      max-width: 720px;
       max-height: 88vh;
       overflow: auto;
       padding: 26px;
@@ -230,7 +253,7 @@
       box-shadow: 0 30px 90px rgba(0,0,0,.8);
     }
 
-    .shop-item {
+    .shop-item, .board-item, .achievement {
       background: rgba(255,255,255,.25);
       padding: 14px;
       border-radius: 18px;
@@ -240,6 +263,11 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
+    }
+
+    .achievement.locked {
+      opacity: .45;
+      filter: grayscale(1);
     }
 
     .buy, .close {
@@ -288,6 +316,41 @@
       margin: 18px 0;
     }
 
+    .spinner-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 320px;
+    }
+
+    #spinner {
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #fff 0 9%, transparent 10%),
+        conic-gradient(from 0deg, var(--accent), var(--key2), var(--glow), var(--accent));
+      box-shadow:
+        inset 0 0 35px rgba(255,255,255,.45),
+        0 0 55px var(--glow);
+      cursor: grab;
+      touch-action: none;
+      position: relative;
+    }
+
+    #spinner::before, #spinner::after {
+      content: "";
+      position: absolute;
+      background: rgba(255,255,255,.35);
+      border-radius: 999px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #spinner::before { width: 200px; height: 34px; }
+    #spinner::after { width: 34px; height: 200px; }
+
     footer {
       position: fixed;
       bottom: 10px;
@@ -330,7 +393,8 @@
       <button class="mode-btn" onclick="setMode('combo')">🍯 Sticky<br>Combo</button>
       <button class="mode-btn" onclick="setMode('words')">🐝 Honey<br>Words</button>
       <button class="mode-btn" onclick="setMode('dont')">🚫 Don’t<br>Press</button>
-      <button class="mode-btn" onclick="claimDaily()">🎁 Daily<br>Gift</button>
+      <button class="mode-btn" onclick="setMode('zen')">🧘 Zen<br>ASMR</button>
+      <button class="mode-btn" onclick="setMode('rain')">🌧️ Key<br>Rain</button>
     </div>
 
     <div class="main">
@@ -341,7 +405,11 @@
         <div>Combo: <span id="combo">0</span>x</div>
         <div>Gems: <span id="gems">0</span></div>
         <div>High: <span id="highScore">0</span></div>
+        <div>Lvl: <span id="level">1</span></div>
+        <div>Streak: <span id="streak">0</span></div>
       </div>
+
+      <div class="xpbar"><div id="xpFill"></div></div>
 
       <div class="screen">
         <div id="message">press the target key</div>
@@ -363,6 +431,7 @@
     <div class="panel right">
       <button class="mode-btn" onclick="setMode('speed')">⚡ Speed<br>Rush</button>
       <button class="mode-btn" onclick="setMode('bee')">🐝 Bee<br>Hunt</button>
+      <button class="mode-btn" onclick="openSpinner()">🌀 Fidget<br>Spinner</button>
       <button class="mode-btn" onclick="watchAd()">🎥 Watch<br>Ad</button>
       <button class="mode-btn" onclick="openShop()">🛒<br>Shop</button>
     </div>
@@ -383,20 +452,42 @@
       <div class="shop-item"><span>🍬 Candy Pop</span><button class="buy" onclick="buyTheme('candy',190)">190 Gems</button></div>
       <div class="shop-item"><span>👑 Royal Keys</span><button class="buy" onclick="buyTheme('royal',230)">230 Gems</button></div>
       <div class="shop-item"><span>💻 Cyber Blue</span><button class="buy" onclick="buyTheme('cyber',220)">220 Gems</button></div>
-      <div class="shop-item"><span>🌿 Mint Frost</span><button class="buy" onclick="buyTheme('mint',160)">160 Gems</button></div>
-      <div class="shop-item"><span>🔥 Inferno</span><button class="buy" onclick="buyTheme('inferno',240)">240 Gems</button></div>
-      <div class="shop-item"><span>🧊 Arctic Pulse</span><button class="buy" onclick="buyTheme('arctic',210)">210 Gems</button></div>
-      <div class="shop-item"><span>🟣 Purple Haze</span><button class="buy" onclick="buyTheme('purple',170)">170 Gems</button></div>
-      <p style="font-weight:900;">Gems are earned by playing or watching ads. Shop is mock/demo for now.</p>
+      <p style="font-weight:900;">Earn gems by playing, leveling up, streaking, and watching ad rewards.</p>
       <button class="close" onclick="closeShop()">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="spinnerModal">
+    <div class="modal-box">
+      <h2>🌀 Fidget Spinner ASMR</h2>
+      <p>Drag it with your mouse or finger. Faster spins give tiny XP.</p>
+      <div class="spinner-wrap"><div id="spinner"></div></div>
+      <button class="close" onclick="closeSpinner()">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="achievementsModal">
+    <div class="modal-box">
+      <h2>🏆 Achievements</h2>
+      <div id="achievementsList"></div>
+      <button class="close" onclick="closeAchievements()">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="leaderboardModal">
+    <div class="modal-box">
+      <h2>👑 Local Leaderboard</h2>
+      <p>This saves on this device only. Global leaderboard needs a database later.</p>
+      <div id="leaderboardList"></div>
+      <button class="close" onclick="saveLocalRun()">Save Current Run</button>
+      <button class="close" onclick="closeLeaderboard()">Close</button>
     </div>
   </div>
 
   <div class="modal" id="about">
     <div class="modal-box">
       <h2>About Keyflow</h2>
-      <p><b>Keyflow</b> is a satisfying keyboard reaction game with glowing keys, unlockable themes, combo modes, sound effects, gems, daily rewards and speed challenges.</p>
-      <p>Play different modes, earn gems, unlock keyboard styles, and build your highest score.</p>
+      <p><b>Keyflow</b> is a satisfying keyboard reaction + ASMR game with gems, levels, themes, streaks, achievements, and mini-games.</p>
       <button class="close" onclick="closeAbout()">Close</button>
     </div>
   </div>
@@ -406,9 +497,11 @@
       <h2>How To Play</h2>
       <p><b>Sticky Combo:</b> hit the glowing key.</p>
       <p><b>Honey Words:</b> type the word shown.</p>
-      <p><b>Don’t Press:</b> avoid the red danger key.</p>
-      <p><b>Speed Rush:</b> hit the key as fast as possible for bonus points.</p>
-      <p><b>Bee Hunt:</b> press all glowing bee keys.</p>
+      <p><b>Don’t Press:</b> avoid the red key.</p>
+      <p><b>Speed Rush:</b> hit fast for bonus points.</p>
+      <p><b>Zen ASMR:</b> press anything and relax.</p>
+      <p><b>Key Rain:</b> clear fast-changing targets.</p>
+      <p><b>Fidget Spinner:</b> drag/spin for ASMR vibes.</p>
       <button class="close" onclick="closeHelp()">Close</button>
     </div>
   </div>
@@ -425,12 +518,14 @@
   <footer>
     <button onclick="openAbout()">About</button>
     <button onclick="openHelp()">Help</button>
+    <button onclick="openAchievements()">Achievements</button>
+    <button onclick="openLeaderboard()">Leaderboard</button>
     <a href="privacy.html">Privacy Policy</a>
   </footer>
 
   <script>
     const letters = "QWERTYUIOPASDFGHJKLZXCVBNM".split("");
-    const words = ["HONEY", "BEE", "FLOW", "GOLD", "STICKY", "KEY", "BUZZ", "GLOW"];
+    const words = ["HONEY", "BEE", "FLOW", "GOLD", "STICKY", "KEY", "BUZZ", "GLOW", "SQUISH", "CLICK"];
 
     const themes = {
       honey:{bg1:"#120800",bg2:"#000",panel:"rgba(255,210,90,.14)",accent:"#ffe38a",key1:"#ffeb87",key2:"#cd5f00",text:"#281400",glow:"#ffcc45",sound:"honey"},
@@ -444,17 +539,16 @@
       ocean:{bg1:"#001b2e",bg2:"#000",panel:"rgba(0,180,255,.13)",accent:"#a7ecff",key1:"#b8f3ff",key2:"#006c9c",text:"#00151f",glow:"#34cfff",sound:"ocean"},
       candy:{bg1:"#21001d",bg2:"#050005",panel:"rgba(255,170,240,.15)",accent:"#ffd6fb",key1:"#ffd1f7",key2:"#e856c7",text:"#270020",glow:"#ff6ee7",sound:"candy"},
       royal:{bg1:"#160014",bg2:"#030003",panel:"rgba(255,210,90,.12)",accent:"#ffe9a8",key1:"#ffe28a",key2:"#6d34c7",text:"#1c0020",glow:"#d8a8ff",sound:"royal"},
-      cyber:{bg1:"#020014",bg2:"#000",panel:"rgba(90,120,255,.13)",accent:"#b9c7ff",key1:"#adbaff",key2:"#2438c9",text:"#04091f",glow:"#6d7cff",sound:"cyber"},
-      mint:{bg1:"#001b12",bg2:"#000",panel:"rgba(120,255,200,.13)",accent:"#caffee",key1:"#c9ffe9",key2:"#00a878",text:"#002015",glow:"#55ffbf",sound:"mint"},
-      inferno:{bg1:"#2b0000",bg2:"#050000",panel:"rgba(255,90,30,.14)",accent:"#ffd1a1",key1:"#ffd27a",key2:"#d92300",text:"#2c0500",glow:"#ff6400",sound:"inferno"},
-      arctic:{bg1:"#001622",bg2:"#000",panel:"rgba(180,235,255,.14)",accent:"#e3fbff",key1:"#e9fdff",key2:"#4aa8d8",text:"#00141c",glow:"#9eeaff",sound:"arctic"},
-      purple:{bg1:"#140021",bg2:"#000",panel:"rgba(190,110,255,.14)",accent:"#e8c6ff",key1:"#e9c4ff",key2:"#8b2eff",text:"#1a0025",glow:"#b85cff",sound:"purple"}
+      cyber:{bg1:"#020014",bg2:"#000",panel:"rgba(90,120,255,.13)",accent:"#b9c7ff",key1:"#adbaff",key2:"#2438c9",text:"#04091f",glow:"#6d7cff",sound:"cyber"}
     };
 
     const scoreEl = document.getElementById("score");
     const comboEl = document.getElementById("combo");
     const gemsEl = document.getElementById("gems");
     const highScoreEl = document.getElementById("highScore");
+    const levelEl = document.getElementById("level");
+    const streakEl = document.getElementById("streak");
+    const xpFill = document.getElementById("xpFill");
     const messageEl = document.getElementById("message");
     const keys = document.querySelectorAll(".key");
     const adScreen = document.getElementById("adScreen");
@@ -463,15 +557,61 @@
     let score = Number(localStorage.getItem("score")) || 0;
     let gems = Number(localStorage.getItem("gems")) || 0;
     let highScore = Number(localStorage.getItem("highScore")) || 0;
+    let xp = Number(localStorage.getItem("xp")) || 0;
+    let level = Number(localStorage.getItem("level")) || 1;
+    let streak = Number(localStorage.getItem("streak")) || 0;
     let ownedThemes = JSON.parse(localStorage.getItem("ownedThemes") || '["honey"]');
     let currentTheme = localStorage.getItem("theme") || "honey";
-    let combo = 0, target = "", mode = "combo", wordTarget = "", wordProgress = "", beeTargets = [];
+    let unlockedAchievements = JSON.parse(localStorage.getItem("achievements") || "[]");
+    let combo = 0, target = "", mode = "combo", wordTarget = "", wordProgress = "", beeTargets = [], bonusTarget = "";
     let roundStartTime = Date.now();
     let adRunning = false;
 
-    scoreEl.textContent = score;
-    gemsEl.textContent = gems;
-    highScoreEl.textContent = highScore;
+    const achievements = [
+      {id:"first", name:"First Flow", desc:"Score your first point", check:()=>score>0},
+      {id:"combo10", name:"Combo Cooker", desc:"Reach 10 combo", check:()=>combo>=10},
+      {id:"score500", name:"Half Thousand", desc:"Reach 500 score", check:()=>score>=500},
+      {id:"level5", name:"Level 5 Legend", desc:"Reach level 5", check:()=>level>=5},
+      {id:"rich", name:"Gem Collector", desc:"Hold 250 gems", check:()=>gems>=250},
+      {id:"streak3", name:"Three Day Flow", desc:"Reach a 3 day streak", check:()=>streak>=3}
+    ];
+
+    function updateUI() {
+      scoreEl.textContent = score;
+      gemsEl.textContent = gems;
+      highScoreEl.textContent = highScore;
+      comboEl.textContent = combo;
+      levelEl.textContent = level;
+      streakEl.textContent = streak;
+      xpFill.style.width = Math.min(100, (xp / xpNeed()) * 100) + "%";
+    }
+
+    function xpNeed() { return 100 + level * 35; }
+
+    function addXP(amount) {
+      xp += amount;
+      while (xp >= xpNeed()) {
+        xp -= xpNeed();
+        level++;
+        gems += 30;
+        messageEl.textContent = "LEVEL UP! +30 gems";
+        bigParticles();
+      }
+      checkAchievements();
+      save();
+      updateUI();
+    }
+
+    function save() {
+      localStorage.setItem("score", score);
+      localStorage.setItem("gems", gems);
+      localStorage.setItem("highScore", highScore);
+      localStorage.setItem("xp", xp);
+      localStorage.setItem("level", level);
+      localStorage.setItem("streak", streak);
+      localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
+      localStorage.setItem("achievements", JSON.stringify(unlockedAchievements));
+    }
 
     function applyTheme(name) {
       const t = themes[name];
@@ -487,90 +627,81 @@
       document.documentElement.style.setProperty("--glow", t.glow);
     }
 
-    function save() {
-      localStorage.setItem("score", score);
-      localStorage.setItem("gems", gems);
-      localStorage.setItem("highScore", highScore);
-      localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
-    }
-
-    function playSound() {
+    function playSound(kind) {
       const audio = new (window.AudioContext || window.webkitAudioContext)();
       const osc = audio.createOscillator();
       const gain = audio.createGain();
-      const sound = themes[currentTheme].sound;
+      const sound = kind || themes[currentTheme].sound;
 
       const settings = {
-        honey:{type:"sine",start:180,end:90,time:.12},
-        neon:{type:"square",start:620,end:240,time:.08},
-        glass:{type:"triangle",start:900,end:650,time:.10},
-        galaxy:{type:"sine",start:520,end:820,time:.14},
-        pop:{type:"triangle",start:320,end:170,time:.09},
-        void:{type:"sawtooth",start:120,end:60,time:.16},
-        toxic:{type:"square",start:260,end:430,time:.10},
-        lava:{type:"sawtooth",start:140,end:80,time:.18},
-        ocean:{type:"sine",start:240,end:160,time:.15},
-        candy:{type:"triangle",start:700,end:980,time:.08},
-        royal:{type:"sine",start:440,end:330,time:.13},
-        cyber:{type:"square",start:1000,end:520,time:.07},
-        mint:{type:"sine",start:660,end:420,time:.09},
-        inferno:{type:"sawtooth",start:210,end:95,time:.16},
-        arctic:{type:"triangle",start:980,end:720,time:.11},
-        purple:{type:"sine",start:360,end:540,time:.12}
+        honey:["sine",180,90,.12], neon:["square",620,240,.08], glass:["triangle",900,650,.10],
+        galaxy:["sine",520,820,.14], pop:["triangle",320,170,.09], void:["sawtooth",120,60,.16],
+        toxic:["square",260,430,.10], lava:["sawtooth",140,80,.18], ocean:["sine",240,160,.15],
+        candy:["triangle",700,980,.08], royal:["sine",440,330,.13], cyber:["square",1000,520,.07],
+        squish:["sine",90,45,.2], spinner:["triangle",260,140,.05], reward:["sine",700,1200,.16]
       };
 
-      const s = settings[sound];
-      osc.type = s.type;
-      osc.frequency.setValueAtTime(s.start, audio.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(s.end, audio.currentTime + s.time);
+      const s = settings[sound] || settings.honey;
+      osc.type = s[0];
+      osc.frequency.setValueAtTime(s[1], audio.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(s[2], audio.currentTime + s[3]);
       gain.gain.setValueAtTime(0.18, audio.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + s.time);
+      gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + s[3]);
       osc.connect(gain);
       gain.connect(audio.destination);
       osc.start();
-      osc.stop(audio.currentTime + s.time);
+      osc.stop(audio.currentTime + s[3]);
     }
 
-    function particles() {
-      for (let i = 0; i < 14; i++) {
-        const p = document.createElement("div");
-        p.className = "particle";
-        p.style.left = "50%";
-        p.style.top = "50%";
-        p.style.setProperty("--x", (Math.random()*240-120) + "px");
-        p.style.setProperty("--y", (Math.random()*240-120) + "px");
+    function particles(amount=14) {
+      for (let i=0;i<amount;i++) {
+        const p=document.createElement("div");
+        p.className="particle";
+        p.style.left="50%"; p.style.top="50%";
+        p.style.setProperty("--x",(Math.random()*260-130)+"px");
+        p.style.setProperty("--y",(Math.random()*260-130)+"px");
         document.body.appendChild(p);
-        setTimeout(() => p.remove(), 750);
+        setTimeout(()=>p.remove(),750);
       }
     }
 
+    function bigParticles() { particles(34); playSound("reward"); }
+
     function pressVisual(keyName) {
-      const key = document.querySelector(`[data-key="${keyName}"]`);
+      const key=document.querySelector(`[data-key="${keyName}"]`);
       if (!key) return;
       key.classList.add("pressed");
-      setTimeout(() => key.classList.remove("pressed"), 110);
+      setTimeout(()=>key.classList.remove("pressed"),120);
     }
 
     function clearKeys() {
-      document.querySelectorAll(".target-key, .danger-key").forEach(k => k.classList.remove("target-key","danger-key"));
+      document.querySelectorAll(".target-key,.danger-key,.bonus-key").forEach(k=>k.classList.remove("target-key","danger-key","bonus-key"));
     }
 
-    function glow(keyName, type="target-key") {
-      const key = document.querySelector(`[data-key="${keyName}"]`);
+    function glow(keyName,type="target-key") {
+      const key=document.querySelector(`[data-key="${keyName}"]`);
       if (key) key.classList.add(type);
     }
 
     function randomLetter(except=[]) {
       let pick;
-      do { pick = letters[Math.floor(Math.random()*letters.length)]; }
+      do { pick=letters[Math.floor(Math.random()*letters.length)]; }
       while (except.includes(pick));
       return pick;
+    }
+
+    function maybeBonus() {
+      bonusTarget = "";
+      if (Math.random() < 0.16) {
+        bonusTarget = randomLetter([target]);
+        glow(bonusTarget, "bonus-key");
+      }
     }
 
     function setMode(newMode) {
       mode = newMode;
       combo = 0;
-      comboEl.textContent = combo;
+      updateUI();
       newRound();
     }
 
@@ -578,10 +709,15 @@
       clearKeys();
       roundStartTime = Date.now();
 
-      if (mode === "combo" || mode === "speed") {
+      if (mode === "combo" || mode === "speed" || mode === "rain") {
         target = randomLetter();
-        messageEl.textContent = mode === "speed" ? "SPEED! Hit " + target : "Hit " + target;
+        messageEl.textContent =
+          mode === "speed" ? "SPEED! Hit " + target :
+          mode === "rain" ? "Key Rain: clear " + target :
+          "Hit " + target;
         glow(target);
+        maybeBonus();
+        if (mode === "rain") setTimeout(()=>{ if(mode==="rain") newRound(); }, 1700);
       }
 
       if (mode === "words") {
@@ -595,61 +731,91 @@
       if (mode === "dont") {
         target = randomLetter();
         messageEl.textContent = "Don't press " + target;
-        glow(target, "danger-key");
+        glow(target,"danger-key");
+        maybeBonus();
       }
 
       if (mode === "bee") {
         beeTargets = [randomLetter(), randomLetter(), randomLetter()];
         messageEl.textContent = "Bee Hunt: " + beeTargets.join(" ");
-        beeTargets.forEach(k => glow(k));
+        beeTargets.forEach(k=>glow(k));
+      }
+
+      if (mode === "zen") {
+        messageEl.textContent = "Zen ASMR: press anything";
       }
     }
 
-    function correct(points=10) {
+    function correct(points=10, xpGain=7) {
       combo++;
       score += points + combo;
       gems += 1;
+      if (Math.random() < 0.06) {
+        gems += 5;
+        messageEl.textContent = "Rare gem drop! +5";
+      }
       if (score > highScore) highScore = score;
-      scoreEl.textContent = score;
-      comboEl.textContent = combo;
-      gemsEl.textContent = gems;
-      highScoreEl.textContent = highScore;
       particles();
+      addXP(xpGain);
+      checkAchievements();
       save();
+      updateUI();
     }
 
     function wrong() {
       combo = 0;
-      comboEl.textContent = combo;
       messageEl.textContent = "Miss!";
+      updateUI();
     }
 
     function triggerKey(keyName) {
-      playSound();
+      playSound(mode === "zen" ? "squish" : null);
       pressVisual(keyName);
 
-      if (mode === "combo") {
-        keyName === target ? correct(10) : wrong();
+      if (keyName === bonusTarget) {
+        gems += 10;
+        addXP(10);
+        messageEl.textContent = "BONUS KEY! +10 gems";
+        bonusTarget = "";
+        clearKeys();
         newRound();
-      } else if (mode === "speed") {
+        return;
+      }
+
+      if (mode === "zen") {
+        correct(2, 3);
+        messageEl.textContent = "squish + flow";
+        return;
+      }
+
+      if (mode === "combo" || mode === "rain") {
+        keyName === target ? correct(10, 7) : wrong();
+        newRound();
+      }
+
+      else if (mode === "speed") {
         if (keyName === target) {
           const reaction = Date.now() - roundStartTime;
           const bonus = Math.max(5, Math.floor(45 - reaction / 50));
-          correct(20 + bonus);
+          correct(20 + bonus, 10);
           messageEl.textContent = "Speed bonus +" + bonus;
         } else wrong();
         newRound();
-      } else if (mode === "dont") {
-        keyName === target ? wrong() : correct(6);
+      }
+
+      else if (mode === "dont") {
+        keyName === target ? wrong() : correct(6, 5);
         newRound();
-      } else if (mode === "words") {
+      }
+
+      else if (mode === "words") {
         if (keyName === target) {
           wordProgress += keyName;
-          correct(12);
+          correct(12, 9);
           if (wordProgress === wordTarget) {
             score += 40;
+            addXP(22);
             messageEl.textContent = "Word cleared!";
-            save();
             newRound();
           } else {
             clearKeys();
@@ -658,16 +824,18 @@
             glow(target);
           }
         } else { wrong(); newRound(); }
-      } else if (mode === "bee") {
+      }
+
+      else if (mode === "bee") {
         if (beeTargets.includes(keyName)) {
-          correct(12);
+          correct(12, 8);
           beeTargets = beeTargets.filter(k => k !== keyName);
           clearKeys();
-          beeTargets.forEach(k => glow(k));
+          beeTargets.forEach(k=>glow(k));
           if (beeTargets.length === 0) {
             score += 50;
+            addXP(25);
             messageEl.textContent = "Bee Hunt cleared!";
-            save();
             newRound();
           } else {
             messageEl.textContent = "Bees left: " + beeTargets.join(" ");
@@ -676,48 +844,52 @@
       }
     }
 
-    keys.forEach(key => key.addEventListener("click", () => triggerKey(key.dataset.key)));
-
-    document.addEventListener("keydown", e => {
-      const key = e.key.toUpperCase();
+    keys.forEach(key=>key.addEventListener("click",()=>triggerKey(key.dataset.key)));
+    document.addEventListener("keydown",e=>{
+      const key=e.key.toUpperCase();
       if (/^[A-Z]$/.test(key)) triggerKey(key);
     });
 
     function claimDaily() {
       const today = new Date().toDateString();
-      if (localStorage.getItem("daily") === today) {
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      const last = localStorage.getItem("daily");
+
+      if (last === today) {
         messageEl.textContent = "Daily gift already claimed!";
         return;
       }
-      gems += 50;
+
+      streak = last === yesterday ? streak + 1 : 1;
+      gems += 50 + (streak * 5);
       localStorage.setItem("daily", today);
-      gemsEl.textContent = gems;
-      messageEl.textContent = "Daily gift: +50 gems!";
+      messageEl.textContent = "Daily gift! Streak " + streak + " 🔥";
+      addXP(25);
       save();
+      updateUI();
     }
 
     function watchAd() {
       if (adRunning) return;
       adRunning = true;
-
       let seconds = 10;
       adCountdown.textContent = seconds;
       adScreen.style.display = "flex";
 
-      const timer = setInterval(() => {
+      const timer = setInterval(()=>{
         seconds--;
         adCountdown.textContent = seconds;
-
         if (seconds <= 0) {
           clearInterval(timer);
           gems += 25;
-          gemsEl.textContent = gems;
+          addXP(15);
           save();
+          updateUI();
           adScreen.style.display = "none";
           messageEl.textContent = "Ad reward complete! +25 gems";
           adRunning = false;
         }
-      }, 1000);
+      },1000);
     }
 
     function buyTheme(name,cost) {
@@ -727,31 +899,114 @@
         closeShop();
         return;
       }
-
       if (gems < cost) {
         messageEl.textContent = "Not enough gems!";
         return;
       }
-
       gems -= cost;
       ownedThemes.push(name);
-      gemsEl.textContent = gems;
       applyTheme(name);
       messageEl.textContent = "Unlocked: " + name;
       save();
+      updateUI();
       closeShop();
     }
 
-    function openShop() { document.getElementById("shop").style.display = "flex"; }
-    function closeShop() { document.getElementById("shop").style.display = "none"; }
+    function checkAchievements() {
+      achievements.forEach(a=>{
+        if (!unlockedAchievements.includes(a.id) && a.check()) {
+          unlockedAchievements.push(a.id);
+          gems += 20;
+          messageEl.textContent = "Achievement unlocked: " + a.name + " +20 gems";
+          bigParticles();
+        }
+      });
+    }
 
-    function openAbout() { document.getElementById("about").style.display = "flex"; }
-    function closeAbout() { document.getElementById("about").style.display = "none"; }
-    function openHelp() { document.getElementById("help").style.display = "flex"; }
-    function closeHelp() { document.getElementById("help").style.display = "none"; }
+    function openAchievements() {
+      const list = document.getElementById("achievementsList");
+      list.innerHTML = "";
+      achievements.forEach(a=>{
+        const done = unlockedAchievements.includes(a.id);
+        list.innerHTML += `<div class="achievement ${done ? "" : "locked"}"><span>${done ? "✅" : "🔒"} ${a.name}<br><small>${a.desc}</small></span><span>${done ? "Unlocked" : "Locked"}</span></div>`;
+      });
+      document.getElementById("achievementsModal").style.display="flex";
+    }
+
+    function closeAchievements(){ document.getElementById("achievementsModal").style.display="none"; }
+
+    function saveLocalRun() {
+      let board = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+      board.push({score, level, date:new Date().toLocaleDateString()});
+      board.sort((a,b)=>b.score-a.score);
+      board = board.slice(0,5);
+      localStorage.setItem("leaderboard", JSON.stringify(board));
+      renderLeaderboard();
+    }
+
+    function renderLeaderboard() {
+      const list = document.getElementById("leaderboardList");
+      const board = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+      list.innerHTML = board.length ? "" : "<p>No saved runs yet.</p>";
+      board.forEach((b,i)=>{
+        list.innerHTML += `<div class="board-item"><span>#${i+1} Score ${b.score}</span><span>Lvl ${b.level} · ${b.date}</span></div>`;
+      });
+    }
+
+    function openLeaderboard(){ renderLeaderboard(); document.getElementById("leaderboardModal").style.display="flex"; }
+    function closeLeaderboard(){ document.getElementById("leaderboardModal").style.display="none"; }
+
+    function openShop(){ document.getElementById("shop").style.display="flex"; }
+    function closeShop(){ document.getElementById("shop").style.display="none"; }
+    function openAbout(){ document.getElementById("about").style.display="flex"; }
+    function closeAbout(){ document.getElementById("about").style.display="none"; }
+    function openHelp(){ document.getElementById("help").style.display="flex"; }
+    function closeHelp(){ document.getElementById("help").style.display="none"; }
+
+    const spinner = document.getElementById("spinner");
+    let spinAngle=0, spinVelocity=0, dragging=false, lastX=0, lastTime=Date.now();
+
+    function openSpinner(){ document.getElementById("spinnerModal").style.display="flex"; }
+    function closeSpinner(){ document.getElementById("spinnerModal").style.display="none"; }
+
+    spinner.addEventListener("pointerdown",e=>{
+      dragging=true;
+      lastX=e.clientX;
+      lastTime=Date.now();
+      spinner.setPointerCapture(e.pointerId);
+    });
+
+    spinner.addEventListener("pointermove",e=>{
+      if(!dragging) return;
+      const now=Date.now();
+      const dx=e.clientX-lastX;
+      spinAngle += dx * 1.4;
+      spinVelocity = dx / Math.max(1, now-lastTime) * 22;
+      spinner.style.transform = `rotate(${spinAngle}deg)`;
+      if (Math.abs(spinVelocity) > 8) {
+        playSound("spinner");
+        addXP(1);
+      }
+      lastX=e.clientX;
+      lastTime=now;
+    });
+
+    spinner.addEventListener("pointerup",()=>dragging=false);
+
+    function spinLoop(){
+      if(!dragging && Math.abs(spinVelocity)>0.05){
+        spinAngle += spinVelocity;
+        spinVelocity *= 0.985;
+        spinner.style.transform = `rotate(${spinAngle}deg)`;
+      }
+      requestAnimationFrame(spinLoop);
+    }
 
     applyTheme(currentTheme);
+    updateUI();
+    checkAchievements();
     newRound();
+    spinLoop();
   </script>
 </body>
 </html>
