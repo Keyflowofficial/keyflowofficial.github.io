@@ -1,1 +1,731 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Keyflow</title>
+ <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4864966715167962"
+     crossorigin="anonymous"></script>
+</head>
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
+  <style>
+    * { box-sizing: border-box; }
 
+    :root {
+      --bg1:#120800; --bg2:#000;
+      --panel:rgba(255,210,90,.14);
+      --accent:#ffe38a;
+      --key1:#ffeb87; --key2:#cd5f00;
+      --keyText:#281400;
+      --glow:#ffcc45;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--glow) 35%, transparent), transparent 25%),
+        radial-gradient(circle at 80% 80%, color-mix(in srgb, var(--key2) 35%, transparent), transparent 30%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -120px;
+      background: radial-gradient(circle, rgba(255,255,255,.16) 0 2px, transparent 3px);
+      background-size: 55px 55px;
+      animation: drift 18s linear infinite;
+      opacity: .55;
+    }
+
+    @keyframes drift { to { transform: translateY(90px); } }
+
+    .app {
+      position: relative;
+      z-index: 2;
+      width: 98vw;
+      max-width: 1220px;
+      display: grid;
+      grid-template-columns: 180px 1fr 180px;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .panel { display: flex; flex-direction: column; gap: 14px; }
+
+    .mode-btn {
+      min-height: 78px;
+      border: 0;
+      border-radius: 24px;
+      cursor: pointer;
+      font-weight: 1000;
+      font-size: 15px;
+      color: var(--keyText);
+      background:
+        radial-gradient(circle at 35% 20%, rgba(255,255,255,.65), transparent 30%),
+        linear-gradient(145deg, var(--key1), var(--key2));
+      box-shadow:
+        inset 0 8px 14px rgba(255,255,255,.35),
+        inset 0 -10px 14px rgba(0,0,0,.28),
+        0 9px 0 color-mix(in srgb, var(--key2) 70%, #000),
+        0 18px 28px rgba(0,0,0,.45);
+      transition: .1s ease;
+    }
+
+    .mode-btn:active {
+      transform: translateY(8px) scale(.96);
+      box-shadow: inset 0 14px 20px rgba(0,0,0,.45), 0 2px 0 #000;
+    }
+
+    .main { text-align: center; }
+
+    h1 {
+      font-size: 48px;
+      margin: 0 0 12px;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-shadow: 0 0 28px var(--glow);
+    }
+
+    .hud {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .hud div {
+      padding: 13px;
+      border-radius: 18px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      font-weight: 900;
+      box-shadow: inset 0 0 20px color-mix(in srgb, var(--glow) 22%, transparent);
+    }
+
+    .screen {
+      height: 104px;
+      margin-bottom: 20px;
+      border-radius: 30px;
+      background: color-mix(in srgb, var(--glow) 16%, transparent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 36px color-mix(in srgb, var(--glow) 35%, transparent);
+      padding: 12px;
+    }
+
+    #message {
+      font-size: 27px;
+      font-weight: 950;
+      color: var(--accent);
+      text-shadow: 0 0 20px var(--glow);
+    }
+
+    #keyboard {
+      padding: 26px 20px 30px;
+      border-radius: 42px;
+      background:
+        radial-gradient(circle at 30% 12%, rgba(255,255,255,.45), transparent 20%),
+        linear-gradient(145deg, color-mix(in srgb, var(--key1) 90%, white), color-mix(in srgb, var(--key2) 95%, black));
+      box-shadow:
+        inset 0 16px 28px rgba(255,255,255,.25),
+        inset 0 -30px 44px rgba(0,0,0,.45),
+        0 36px 92px rgba(0,0,0,.75);
+      transition: .25s ease;
+    }
+
+    .key-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 11px;
+    }
+
+    .middle-row { padding-left: 30px; padding-right: 30px; }
+    .bottom-letters { padding-left: 70px; padding-right: 70px; }
+
+    .key {
+      width: 60px;
+      height: 62px;
+      border: 0;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 1000;
+      color: var(--keyText);
+      background:
+        radial-gradient(circle at 35% 20%, rgba(255,255,255,.72), transparent 28%),
+        linear-gradient(145deg, var(--key1), var(--key2));
+      box-shadow:
+        inset 0 10px 14px rgba(255,255,255,.42),
+        inset 0 -12px 16px rgba(0,0,0,.32),
+        0 10px 0 color-mix(in srgb, var(--key2) 70%, #000),
+        0 18px 24px rgba(0,0,0,.45);
+      transition: .08s ease;
+    }
+
+    .key.pressed {
+      transform: translateY(9px) scale(.96,.86);
+      filter: saturate(1.35) brightness(.95);
+      box-shadow:
+        inset 0 16px 24px rgba(0,0,0,.55),
+        0 2px 0 color-mix(in srgb, var(--key2) 70%, #000);
+    }
+
+    .key.target-key { animation: pulse .65s infinite alternate; }
+    .key.danger-key { animation: danger .55s infinite alternate; }
+
+    @keyframes pulse {
+      from { filter: brightness(1); box-shadow: 0 0 16px var(--glow), 0 10px 0 color-mix(in srgb, var(--key2) 70%, #000); }
+      to { filter: brightness(1.25); box-shadow: 0 0 46px var(--accent), 0 10px 0 color-mix(in srgb, var(--key2) 70%, #000); }
+    }
+
+    @keyframes danger {
+      from { box-shadow: 0 0 14px #ff3b1f, 0 10px 0 #5c1800; }
+      to { box-shadow: 0 0 42px #ff1a00, 0 10px 0 #5c1800; }
+    }
+
+    .particle {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      animation: pop .75s ease-out forwards;
+      z-index: 99;
+    }
+
+    @keyframes pop {
+      to { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .modal-box {
+      width: 90%;
+      max-width: 680px;
+      max-height: 88vh;
+      overflow: auto;
+      padding: 26px;
+      border-radius: 32px;
+      background: linear-gradient(145deg, var(--key1), var(--key2));
+      color: var(--keyText);
+      box-shadow: 0 30px 90px rgba(0,0,0,.8);
+    }
+
+    .shop-item {
+      background: rgba(255,255,255,.25);
+      padding: 14px;
+      border-radius: 18px;
+      margin: 10px 0;
+      font-weight: 900;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .buy, .close {
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      background: #241000;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .ad-screen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .ad-box {
+      max-width: 520px;
+      width: 90%;
+      border-radius: 28px;
+      padding: 34px;
+      background: #050505;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 0 60px rgba(255,200,80,.18);
+    }
+
+    .ad-box h2 {
+      margin: 0 0 12px;
+      color: #ffe38a;
+      font-size: 32px;
+    }
+
+    #adCountdown {
+      font-size: 54px;
+      font-weight: 1000;
+      color: #fff;
+      margin: 18px 0;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      opacity: .75;
+      z-index: 100;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; padding: 18px 0 50px; }
+      .app { grid-template-columns: 1fr; }
+      .panel { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .mode-btn { width: 46%; min-height: 66px; }
+      h1 { font-size: 38px; }
+      .hud { grid-template-columns: repeat(2,1fr); }
+      .key { width: 33px; height: 46px; border-radius: 14px; font-size: 12px; }
+      .key-row { gap: 6px; }
+      .middle-row { padding-left: 14px; padding-right: 14px; }
+      .bottom-letters { padding-left: 34px; padding-right: 34px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="panel left">
+      <button class="mode-btn" onclick="setMode('combo')">🍯 Sticky<br>Combo</button>
+      <button class="mode-btn" onclick="setMode('words')">🐝 Honey<br>Words</button>
+      <button class="mode-btn" onclick="setMode('dont')">🚫 Don’t<br>Press</button>
+      <button class="mode-btn" onclick="claimDaily()">🎁 Daily<br>Gift</button>
+    </div>
+
+    <div class="main">
+      <h1>Keyflow</h1>
+
+      <div class="hud">
+        <div>Score: <span id="score">0</span></div>
+        <div>Combo: <span id="combo">0</span>x</div>
+        <div>Gems: <span id="gems">0</span></div>
+        <div>High: <span id="highScore">0</span></div>
+      </div>
+
+      <div class="screen">
+        <div id="message">press the target key</div>
+      </div>
+
+      <div id="keyboard">
+        <div class="key-row">
+          <button class="key" data-key="Q">Q</button><button class="key" data-key="W">W</button><button class="key" data-key="E">E</button><button class="key" data-key="R">R</button><button class="key" data-key="T">T</button><button class="key" data-key="Y">Y</button><button class="key" data-key="U">U</button><button class="key" data-key="I">I</button><button class="key" data-key="O">O</button><button class="key" data-key="P">P</button>
+        </div>
+        <div class="key-row middle-row">
+          <button class="key" data-key="A">A</button><button class="key" data-key="S">S</button><button class="key" data-key="D">D</button><button class="key" data-key="F">F</button><button class="key" data-key="G">G</button><button class="key" data-key="H">H</button><button class="key" data-key="J">J</button><button class="key" data-key="K">K</button><button class="key" data-key="L">L</button>
+        </div>
+        <div class="key-row bottom-letters">
+          <button class="key" data-key="Z">Z</button><button class="key" data-key="X">X</button><button class="key" data-key="C">C</button><button class="key" data-key="V">V</button><button class="key" data-key="B">B</button><button class="key" data-key="N">N</button><button class="key" data-key="M">M</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel right">
+      <button class="mode-btn" onclick="setMode('speed')">⚡ Speed<br>Rush</button>
+      <button class="mode-btn" onclick="setMode('bee')">🐝 Bee<br>Hunt</button>
+      <button class="mode-btn" onclick="watchAd()">🎥 Watch<br>Ad</button>
+      <button class="mode-btn" onclick="openShop()">🛒<br>Shop</button>
+    </div>
+  </div>
+
+  <div class="modal" id="shop">
+    <div class="modal-box">
+      <h2>🛒 Keyflow Shop</h2>
+
+      <div class="shop-item"><span>🍯 Honey Classic</span><button class="buy" onclick="buyTheme('honey',0)">Free</button></div>
+      <div class="shop-item"><span>⚡ Neon Cyber</span><button class="buy" onclick="buyTheme('neon',120)">120 Gems</button></div>
+      <div class="shop-item"><span>💎 Glass Ice</span><button class="buy" onclick="buyTheme('glass',140)">140 Gems</button></div>
+      <div class="shop-item"><span>🌌 Galaxy Flow</span><button class="buy" onclick="buyTheme('galaxy',180)">180 Gems</button></div>
+      <div class="shop-item"><span>🍓 Strawberry Goo</span><button class="buy" onclick="buyTheme('strawberry',160)">160 Gems</button></div>
+      <div class="shop-item"><span>🖤 Void Honey</span><button class="buy" onclick="buyTheme('void',220)">220 Gems</button></div>
+      <div class="shop-item"><span>☣️ Toxic Slime</span><button class="buy" onclick="buyTheme('toxic',180)">180 Gems</button></div>
+      <div class="shop-item"><span>🌋 Lava Keys</span><button class="buy" onclick="buyTheme('lava',200)">200 Gems</button></div>
+      <div class="shop-item"><span>🌊 Ocean Glow</span><button class="buy" onclick="buyTheme('ocean',170)">170 Gems</button></div>
+      <div class="shop-item"><span>🍬 Candy Pop</span><button class="buy" onclick="buyTheme('candy',190)">190 Gems</button></div>
+      <div class="shop-item"><span>👑 Royal Keys</span><button class="buy" onclick="buyTheme('royal',230)">230 Gems</button></div>
+      <div class="shop-item"><span>💻 Cyber Blue</span><button class="buy" onclick="buyTheme('cyber',220)">220 Gems</button></div>
+      <div class="shop-item"><span>🌿 Mint Frost</span><button class="buy" onclick="buyTheme('mint',160)">160 Gems</button></div>
+      <div class="shop-item"><span>🔥 Inferno</span><button class="buy" onclick="buyTheme('inferno',240)">240 Gems</button></div>
+      <div class="shop-item"><span>🧊 Arctic Pulse</span><button class="buy" onclick="buyTheme('arctic',210)">210 Gems</button></div>
+      <div class="shop-item"><span>🟣 Purple Haze</span><button class="buy" onclick="buyTheme('purple',170)">170 Gems</button></div>
+
+      <p style="font-weight:900;">Gems are earned by playing or watching ads. Shop is mock/demo for now.</p>
+      <button class="close" onclick="closeShop()">Close</button>
+    </div>
+  </div>
+
+  <div class="ad-screen" id="adScreen">
+    <div class="ad-box">
+      <h2>No ad available at the moment</h2>
+      <p>Simulated rewarded ad for testing.</p>
+      <div id="adCountdown">10</div>
+      <p>Reward unlocks when the timer finishes.</p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="privacy.html">Privacy Policy</a>
+  </footer>
+
+  <script>
+    const letters = "QWERTYUIOPASDFGHJKLZXCVBNM".split("");
+    const words = ["HONEY", "BEE", "FLOW", "GOLD", "STICKY", "KEY", "BUZZ", "GLOW"];
+
+    const themes = {
+      honey:{bg1:"#120800",bg2:"#000",panel:"rgba(255,210,90,.14)",accent:"#ffe38a",key1:"#ffeb87",key2:"#cd5f00",text:"#281400",glow:"#ffcc45",sound:"honey"},
+      neon:{bg1:"#001216",bg2:"#020003",panel:"rgba(0,240,255,.12)",accent:"#75f7ff",key1:"#85f7ff",key2:"#005d75",text:"#00151a",glow:"#00f0ff",sound:"neon"},
+      glass:{bg1:"#071018",bg2:"#000",panel:"rgba(210,245,255,.13)",accent:"#dff9ff",key1:"#e8fbff",key2:"#74a6c9",text:"#06131a",glow:"#b7f3ff",sound:"glass"},
+      galaxy:{bg1:"#16002a",bg2:"#000",panel:"rgba(190,120,255,.14)",accent:"#f0c7ff",key1:"#f1b8ff",key2:"#5c1dba",text:"#160026",glow:"#b056ff",sound:"galaxy"},
+      strawberry:{bg1:"#2a0010",bg2:"#050000",panel:"rgba(255,120,160,.15)",accent:"#ffd0df",key1:"#ffd1df",key2:"#d82364",text:"#2b0010",glow:"#ff4f91",sound:"pop"},
+      void:{bg1:"#050505",bg2:"#000",panel:"rgba(255,255,255,.08)",accent:"#f5d37a",key1:"#333",key2:"#050505",text:"#f5d37a",glow:"#f5d37a",sound:"void"},
+      toxic:{bg1:"#001400",bg2:"#000",panel:"rgba(80,255,80,.12)",accent:"#b6ff7a",key1:"#c8ff76",key2:"#178a00",text:"#071500",glow:"#7cff2e",sound:"toxic"},
+      lava:{bg1:"#260500",bg2:"#000",panel:"rgba(255,80,20,.15)",accent:"#ffd08a",key1:"#ffb347",key2:"#b31300",text:"#260500",glow:"#ff3c00",sound:"lava"},
+      ocean:{bg1:"#001b2e",bg2:"#000",panel:"rgba(0,180,255,.13)",accent:"#a7ecff",key1:"#b8f3ff",key2:"#006c9c",text:"#00151f",glow:"#34cfff",sound:"ocean"},
+      candy:{bg1:"#21001d",bg2:"#050005",panel:"rgba(255,170,240,.15)",accent:"#ffd6fb",key1:"#ffd1f7",key2:"#e856c7",text:"#270020",glow:"#ff6ee7",sound:"candy"},
+      royal:{bg1:"#160014",bg2:"#030003",panel:"rgba(255,210,90,.12)",accent:"#ffe9a8",key1:"#ffe28a",key2:"#6d34c7",text:"#1c0020",glow:"#d8a8ff",sound:"royal"},
+      cyber:{bg1:"#020014",bg2:"#000",panel:"rgba(90,120,255,.13)",accent:"#b9c7ff",key1:"#adbaff",key2:"#2438c9",text:"#04091f",glow:"#6d7cff",sound:"cyber"},
+      mint:{bg1:"#001b12",bg2:"#000",panel:"rgba(120,255,200,.13)",accent:"#caffee",key1:"#c9ffe9",key2:"#00a878",text:"#002015",glow:"#55ffbf",sound:"mint"},
+      inferno:{bg1:"#2b0000",bg2:"#050000",panel:"rgba(255,90,30,.14)",accent:"#ffd1a1",key1:"#ffd27a",key2:"#d92300",text:"#2c0500",glow:"#ff6400",sound:"inferno"},
+      arctic:{bg1:"#001622",bg2:"#000",panel:"rgba(180,235,255,.14)",accent:"#e3fbff",key1:"#e9fdff",key2:"#4aa8d8",text:"#00141c",glow:"#9eeaff",sound:"arctic"},
+      purple:{bg1:"#140021",bg2:"#000",panel:"rgba(190,110,255,.14)",accent:"#e8c6ff",key1:"#e9c4ff",key2:"#8b2eff",text:"#1a0025",glow:"#b85cff",sound:"purple"}
+    };
+
+    const scoreEl = document.getElementById("score");
+    const comboEl = document.getElementById("combo");
+    const gemsEl = document.getElementById("gems");
+    const highScoreEl = document.getElementById("highScore");
+    const messageEl = document.getElementById("message");
+    const keys = document.querySelectorAll(".key");
+    const adScreen = document.getElementById("adScreen");
+    const adCountdown = document.getElementById("adCountdown");
+
+    let score = Number(localStorage.getItem("score")) || 0;
+    let gems = Number(localStorage.getItem("gems")) || 0;
+    let highScore = Number(localStorage.getItem("highScore")) || 0;
+    let ownedThemes = JSON.parse(localStorage.getItem("ownedThemes") || '["honey"]');
+    let currentTheme = localStorage.getItem("theme") || "honey";
+    let combo = 0, target = "", mode = "combo", wordTarget = "", wordProgress = "", beeTargets = [];
+    let roundStartTime = Date.now();
+    let adRunning = false;
+
+    scoreEl.textContent = score;
+    gemsEl.textContent = gems;
+    highScoreEl.textContent = highScore;
+
+    function applyTheme(name) {
+      const t = themes[name];
+      currentTheme = name;
+      localStorage.setItem("theme", name);
+      document.documentElement.style.setProperty("--bg1", t.bg1);
+      document.documentElement.style.setProperty("--bg2", t.bg2);
+      document.documentElement.style.setProperty("--panel", t.panel);
+      document.documentElement.style.setProperty("--accent", t.accent);
+      document.documentElement.style.setProperty("--key1", t.key1);
+      document.documentElement.style.setProperty("--key2", t.key2);
+      document.documentElement.style.setProperty("--keyText", t.text);
+      document.documentElement.style.setProperty("--glow", t.glow);
+    }
+
+    function save() {
+      localStorage.setItem("score", score);
+      localStorage.setItem("gems", gems);
+      localStorage.setItem("highScore", highScore);
+      localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
+    }
+
+    function playSound() {
+      const audio = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+
+      const sound = themes[currentTheme].sound;
+
+      const settings = {
+        honey:{type:"sine",start:180,end:90,time:.12},
+        neon:{type:"square",start:620,end:240,time:.08},
+        glass:{type:"triangle",start:900,end:650,time:.10},
+        galaxy:{type:"sine",start:520,end:820,time:.14},
+        pop:{type:"triangle",start:320,end:170,time:.09},
+        void:{type:"sawtooth",start:120,end:60,time:.16},
+        toxic:{type:"square",start:260,end:430,time:.10},
+        lava:{type:"sawtooth",start:140,end:80,time:.18},
+        ocean:{type:"sine",start:240,end:160,time:.15},
+        candy:{type:"triangle",start:700,end:980,time:.08},
+        royal:{type:"sine",start:440,end:330,time:.13},
+        cyber:{type:"square",start:1000,end:520,time:.07},
+        mint:{type:"sine",start:660,end:420,time:.09},
+        inferno:{type:"sawtooth",start:210,end:95,time:.16},
+        arctic:{type:"triangle",start:980,end:720,time:.11},
+        purple:{type:"sine",start:360,end:540,time:.12}
+      };
+
+      const s = settings[sound];
+
+      osc.type = s.type;
+      osc.frequency.setValueAtTime(s.start, audio.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(s.end, audio.currentTime + s.time);
+
+      gain.gain.setValueAtTime(0.18, audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + s.time);
+
+      osc.connect(gain);
+      gain.connect(audio.destination);
+
+      osc.start();
+      osc.stop(audio.currentTime + s.time);
+    }
+
+    function particles() {
+      for (let i = 0; i < 14; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.style.left = "50%";
+        p.style.top = "50%";
+        p.style.setProperty("--x", (Math.random()*240-120) + "px");
+        p.style.setProperty("--y", (Math.random()*240-120) + "px");
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 750);
+      }
+    }
+
+    function pressVisual(keyName) {
+      const key = document.querySelector(`[data-key="${keyName}"]`);
+      if (!key) return;
+      key.classList.add("pressed");
+      setTimeout(() => key.classList.remove("pressed"), 110);
+    }
+
+    function clearKeys() {
+      document.querySelectorAll(".target-key, .danger-key").forEach(k => k.classList.remove("target-key","danger-key"));
+    }
+
+    function glow(keyName, type="target-key") {
+      const key = document.querySelector(`[data-key="${keyName}"]`);
+      if (key) key.classList.add(type);
+    }
+
+    function randomLetter(except=[]) {
+      let pick;
+      do { pick = letters[Math.floor(Math.random()*letters.length)]; }
+      while (except.includes(pick));
+      return pick;
+    }
+
+    function setMode(newMode) {
+      mode = newMode;
+      combo = 0;
+      comboEl.textContent = combo;
+      newRound();
+    }
+
+    function newRound() {
+      clearKeys();
+      roundStartTime = Date.now();
+
+      if (mode === "combo" || mode === "speed") {
+        target = randomLetter();
+        messageEl.textContent = mode === "speed" ? "SPEED! Hit " + target : "Hit " + target;
+        glow(target);
+      }
+
+      if (mode === "words") {
+        wordTarget = words[Math.floor(Math.random()*words.length)];
+        wordProgress = "";
+        target = wordTarget[0];
+        messageEl.textContent = "Type: " + wordTarget;
+        glow(target);
+      }
+
+      if (mode === "dont") {
+        target = randomLetter();
+        messageEl.textContent = "Don't press " + target;
+        glow(target, "danger-key");
+      }
+
+      if (mode === "bee") {
+        beeTargets = [randomLetter(), randomLetter(), randomLetter()];
+        messageEl.textContent = "Bee Hunt: " + beeTargets.join(" ");
+        beeTargets.forEach(k => glow(k));
+      }
+    }
+
+    function correct(points=10) {
+      combo++;
+      score += points + combo;
+      gems += 1;
+      if (score > highScore) highScore = score;
+      scoreEl.textContent = score;
+      comboEl.textContent = combo;
+      gemsEl.textContent = gems;
+      highScoreEl.textContent = highScore;
+      particles();
+      save();
+    }
+
+    function wrong() {
+      combo = 0;
+      comboEl.textContent = combo;
+      messageEl.textContent = "Miss!";
+    }
+
+    function triggerKey(keyName) {
+      playSound();
+      pressVisual(keyName);
+
+      if (mode === "combo") {
+        keyName === target ? correct(10) : wrong();
+        newRound();
+      } else if (mode === "speed") {
+        if (keyName === target) {
+          const reaction = Date.now() - roundStartTime;
+          const bonus = Math.max(5, Math.floor(45 - reaction / 50));
+          correct(20 + bonus);
+          messageEl.textContent = "Speed bonus +" + bonus;
+        } else wrong();
+        newRound();
+      } else if (mode === "dont") {
+        keyName === target ? wrong() : correct(6);
+        newRound();
+      } else if (mode === "words") {
+        if (keyName === target) {
+          wordProgress += keyName;
+          correct(12);
+          if (wordProgress === wordTarget) {
+            score += 40;
+            messageEl.textContent = "Word cleared!";
+            save();
+            newRound();
+          } else {
+            clearKeys();
+            target = wordTarget[wordProgress.length];
+            messageEl.textContent = wordProgress + " / " + wordTarget;
+            glow(target);
+          }
+        } else { wrong(); newRound(); }
+      } else if (mode === "bee") {
+        if (beeTargets.includes(keyName)) {
+          correct(12);
+          beeTargets = beeTargets.filter(k => k !== keyName);
+          clearKeys();
+          beeTargets.forEach(k => glow(k));
+          if (beeTargets.length === 0) {
+            score += 50;
+            messageEl.textContent = "Bee Hunt cleared!";
+            save();
+            newRound();
+          } else {
+            messageEl.textContent = "Bees left: " + beeTargets.join(" ");
+          }
+        } else { wrong(); newRound(); }
+      }
+    }
+
+    keys.forEach(key => key.addEventListener("click", () => triggerKey(key.dataset.key)));
+
+    document.addEventListener("keydown", e => {
+      const key = e.key.toUpperCase();
+      if (/^[A-Z]$/.test(key)) triggerKey(key);
+    });
+
+    function claimDaily() {
+      const today = new Date().toDateString();
+      if (localStorage.getItem("daily") === today) {
+        messageEl.textContent = "Daily gift already claimed!";
+        return;
+      }
+      gems += 50;
+      localStorage.setItem("daily", today);
+      gemsEl.textContent = gems;
+      messageEl.textContent = "Daily gift: +50 gems!";
+      save();
+    }
+
+    function watchAd() {
+      if (adRunning) return;
+      adRunning = true;
+
+      let seconds = 10;
+      adCountdown.textContent = seconds;
+      adScreen.style.display = "flex";
+
+      const timer = setInterval(() => {
+        seconds--;
+        adCountdown.textContent = seconds;
+
+        if (seconds <= 0) {
+          clearInterval(timer);
+          gems += 25;
+          gemsEl.textContent = gems;
+          save();
+          adScreen.style.display = "none";
+          messageEl.textContent = "Ad reward complete! +25 gems";
+          adRunning = false;
+        }
+      }, 1000);
+    }
+
+    function buyTheme(name,cost) {
+      if (ownedThemes.includes(name)) {
+        applyTheme(name);
+        messageEl.textContent = "Equipped: " + name;
+        closeShop();
+        return;
+      }
+
+      if (gems < cost) {
+        messageEl.textContent = "Not enough gems!";
+        return;
+      }
+
+      gems -= cost;
+      ownedThemes.push(name);
+      gemsEl.textContent = gems;
+      applyTheme(name);
+      messageEl.textContent = "Unlocked: " + name;
+      save();
+      closeShop();
+    }
+
+    function openShop() { document.getElementById("shop").style.display = "flex"; }
+    function closeShop() { document.getElementById("shop").style.display = "none"; }
+
+    applyTheme(currentTheme);
+    newRound();
+  </script>
+</body>
+</html>
