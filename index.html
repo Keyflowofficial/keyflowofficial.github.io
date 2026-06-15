@@ -2,12 +2,12 @@
 <html>
 <head>
   <title>Keyflow</title>
- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4864966715167962"
-     crossorigin="anonymous"></script>
-</head>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4864966715167962"
+    crossorigin="anonymous"></script>
+
   <link rel="icon" type="image/png" href="icon.png">
-  <link rel="icon" type="image/png" href="icon.png">
-  <link rel="icon" type="image/png" href="icon.png">
+
   <style>
     * { box-sizing: border-box; }
 
@@ -299,9 +299,14 @@
       z-index: 100;
     }
 
-    footer a {
+    footer a, footer button {
       color: white;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
       text-decoration: none;
+      font-size: 14px;
+      margin: 0 8px;
     }
 
     @media (max-width: 900px) {
@@ -366,7 +371,6 @@
   <div class="modal" id="shop">
     <div class="modal-box">
       <h2>🛒 Keyflow Shop</h2>
-
       <div class="shop-item"><span>🍯 Honey Classic</span><button class="buy" onclick="buyTheme('honey',0)">Free</button></div>
       <div class="shop-item"><span>⚡ Neon Cyber</span><button class="buy" onclick="buyTheme('neon',120)">120 Gems</button></div>
       <div class="shop-item"><span>💎 Glass Ice</span><button class="buy" onclick="buyTheme('glass',140)">140 Gems</button></div>
@@ -383,9 +387,29 @@
       <div class="shop-item"><span>🔥 Inferno</span><button class="buy" onclick="buyTheme('inferno',240)">240 Gems</button></div>
       <div class="shop-item"><span>🧊 Arctic Pulse</span><button class="buy" onclick="buyTheme('arctic',210)">210 Gems</button></div>
       <div class="shop-item"><span>🟣 Purple Haze</span><button class="buy" onclick="buyTheme('purple',170)">170 Gems</button></div>
-
       <p style="font-weight:900;">Gems are earned by playing or watching ads. Shop is mock/demo for now.</p>
       <button class="close" onclick="closeShop()">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="about">
+    <div class="modal-box">
+      <h2>About Keyflow</h2>
+      <p><b>Keyflow</b> is a satisfying keyboard reaction game with glowing keys, unlockable themes, combo modes, sound effects, gems, daily rewards and speed challenges.</p>
+      <p>Play different modes, earn gems, unlock keyboard styles, and build your highest score.</p>
+      <button class="close" onclick="closeAbout()">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="help">
+    <div class="modal-box">
+      <h2>How To Play</h2>
+      <p><b>Sticky Combo:</b> hit the glowing key.</p>
+      <p><b>Honey Words:</b> type the word shown.</p>
+      <p><b>Don’t Press:</b> avoid the red danger key.</p>
+      <p><b>Speed Rush:</b> hit the key as fast as possible for bonus points.</p>
+      <p><b>Bee Hunt:</b> press all glowing bee keys.</p>
+      <button class="close" onclick="closeHelp()">Close</button>
     </div>
   </div>
 
@@ -399,6 +423,8 @@
   </div>
 
   <footer>
+    <button onclick="openAbout()">About</button>
+    <button onclick="openHelp()">Help</button>
     <a href="privacy.html">Privacy Policy</a>
   </footer>
 
@@ -472,7 +498,6 @@
       const audio = new (window.AudioContext || window.webkitAudioContext)();
       const osc = audio.createOscillator();
       const gain = audio.createGain();
-
       const sound = themes[currentTheme].sound;
 
       const settings = {
@@ -495,17 +520,13 @@
       };
 
       const s = settings[sound];
-
       osc.type = s.type;
       osc.frequency.setValueAtTime(s.start, audio.currentTime);
       osc.frequency.exponentialRampToValueAtTime(s.end, audio.currentTime + s.time);
-
       gain.gain.setValueAtTime(0.18, audio.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + s.time);
-
       osc.connect(gain);
       gain.connect(audio.destination);
-
       osc.start();
       osc.stop(audio.currentTime + s.time);
     }
@@ -723,6 +744,11 @@
 
     function openShop() { document.getElementById("shop").style.display = "flex"; }
     function closeShop() { document.getElementById("shop").style.display = "none"; }
+
+    function openAbout() { document.getElementById("about").style.display = "flex"; }
+    function closeAbout() { document.getElementById("about").style.display = "none"; }
+    function openHelp() { document.getElementById("help").style.display = "flex"; }
+    function closeHelp() { document.getElementById("help").style.display = "none"; }
 
     applyTheme(currentTheme);
     newRound();
