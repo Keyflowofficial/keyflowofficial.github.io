@@ -217,6 +217,66 @@
     .middle-row { padding-left:30px; padding-right:30px; }
     .bottom-letters { padding-left:70px; padding-right:70px; }
 
+    #keyboard.keyboard-shape-rounded .key { border-radius:50%; }
+    #keyboard.keyboard-shape-square .key { border-radius:8px; }
+    #keyboard.keyboard-shape-pill .key { border-radius:999px; }
+    #keyboard.keyboard-shape-diamond .key {
+      border-radius:14px;
+      transform:rotate(45deg);
+    }
+    #keyboard.keyboard-shape-diamond .key.pressed {
+      transform:rotate(45deg) translateY(9px) scale(.96,.86);
+    }
+    #keyboard.keyboard-shape-diamond .key {
+      line-height:62px;
+    }
+    #keyboard.keyboard-shape-diamond .key::first-letter {
+      transform:rotate(-45deg);
+    }
+
+    .customizer-panel {
+      margin-top:14px;
+      padding:14px;
+      border-radius:24px;
+      background:rgba(255,255,255,.12);
+      box-shadow:inset 0 0 22px rgba(255,255,255,.08);
+      font-weight:900;
+    }
+
+    .customizer-row {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:9px;
+      align-items:center;
+      margin:9px 0;
+    }
+
+    .color-picker {
+      width:52px;
+      height:38px;
+      border:0;
+      border-radius:12px;
+      cursor:pointer;
+      background:transparent;
+    }
+
+    #spinner.hexagon {
+      border-radius:24px;
+      clip-path:polygon(25% 6%,75% 6%,100% 50%,75% 94%,25% 94%,0% 50%);
+    }
+
+    #spinner.diamond {
+      border-radius:24px;
+      clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+    }
+
+    #spinner.blade {
+      border-radius:35%;
+      clip-path:polygon(50% 0%,62% 34%,100% 25%,72% 50%,100% 75%,62% 66%,50% 100%,38% 66%,0% 75%,28% 50%,0% 25%,38% 34%);
+    }
+
+
     .key {
       width:60px;
       height:62px;
@@ -523,6 +583,22 @@
               <button class="key" data-key="Z">Z</button><button class="key" data-key="X">X</button><button class="key" data-key="C">C</button><button class="key" data-key="V">V</button><button class="key" data-key="B">B</button><button class="key" data-key="N">N</button><button class="key" data-key="M">M</button>
             </div>
           </div>
+
+          <div class="customizer-panel">
+            <div>Keyboard Customizer</div>
+            <div class="customizer-row">
+              <button class="mini-btn" onclick="setKeyboardShape('classic')">Classic</button>
+              <button class="mini-btn" onclick="setKeyboardShape('rounded')">Round</button>
+              <button class="mini-btn" onclick="setKeyboardShape('square')">Square</button>
+              <button class="mini-btn" onclick="setKeyboardShape('pill')">Pill</button>
+              <button class="mini-btn" onclick="setKeyboardShape('diamond')">Diamond</button>
+            </div>
+            <div class="customizer-row">
+              <span>Keyboard Colour</span>
+              <input class="color-picker" id="keyboardColorWheel" type="color" value="#ffeb87" oninput="setKeyboardColor(this.value)">
+              <button class="mini-btn" onclick="resetKeyboardColor()">Reset Theme Colour</button>
+            </div>
+          </div>
         </div>
 
         <div id="asmrSection" class="hidden">
@@ -541,6 +617,14 @@
               <button class="mini-btn" onclick="setSpinnerShape('star')">Star</button>
               <button class="mini-btn" onclick="setSpinnerShape('flower')">Flower</button>
               <button class="mini-btn" onclick="setSpinnerShape('triangle')">Tri</button>
+              <button class="mini-btn" onclick="setSpinnerShape('hexagon')">Hex</button>
+              <button class="mini-btn" onclick="setSpinnerShape('diamond')">Diamond</button>
+              <button class="mini-btn" onclick="setSpinnerShape('blade')">Blade</button>
+            </div>
+            <div class="customizer-row">
+              <span>Spinner Colour</span>
+              <input class="color-picker" id="spinnerColorWheel" type="color" value="#ffcc45" oninput="setSpinnerColor(this.value)">
+              <button class="mini-btn" onclick="resetSpinnerColor()">Reset Spinner Colour</button>
             </div>
             <div class="stat">Spin Speed: <span id="spinSpeed">0</span></div>
           </div>
@@ -621,7 +705,7 @@
       neon:{label:"⚡ Neon Cyber",cost:120,bg1:"#001216",bg2:"#020003",panel:"rgba(0,240,255,.12)",accent:"#75f7ff",key1:"#85f7ff",key2:"#005d75",text:"#00151a",glow:"#00f0ff",sound:"neon"},
       glass:{label:"💎 Glass Ice",cost:140,bg1:"#071018",bg2:"#000",panel:"rgba(210,245,255,.13)",accent:"#dff9ff",key1:"#e8fbff",key2:"#74a6c9",text:"#06131a",glow:"#b7f3ff",sound:"glass"},
       galaxy:{label:"🌌 Galaxy Flow",cost:180,bg1:"#16002a",bg2:"#000",panel:"rgba(190,120,255,.14)",accent:"#f0c7ff",key1:"#f1b8ff",key2:"#5c1dba",text:"#160026",glow:"#b056ff",sound:"galaxy"},
-      strawberry:{label:"🍓 Strawberry Goo",cost:160,bg1:"#2a0010",bg2:"#050000",panel:"rgba(255,120,160,.15)",accent:"#ffd0df",key1:"#ffd1df",key2:"#d82364",text:"#2b0010",glow:"#ff4f91",sound:"pop"},
+      strawberry:{label:"🍓 Strawberry Goo",cost:160,bg1:"#2a0010",bg2:"#050000",panel:"rgba(255,120,160,.15)",accent:"#ffd0df",key1:"#ffd1df",key2:"#d82364",text:"#2b0010",glow:"#ff4f91",sound:"strawberry"},
       void:{label:"🖤 Void Honey",cost:220,bg1:"#050505",bg2:"#000",panel:"rgba(255,255,255,.08)",accent:"#f5d37a",key1:"#333",key2:"#050505",text:"#f5d37a",glow:"#f5d37a",sound:"void"},
       toxic:{label:"☣️ Toxic Slime",cost:180,bg1:"#001400",bg2:"#000",panel:"rgba(80,255,80,.12)",accent:"#b6ff7a",key1:"#c8ff76",key2:"#178a00",text:"#071500",glow:"#7cff2e",sound:"toxic"},
       lava:{label:"🌋 Lava Keys",cost:200,bg1:"#260500",bg2:"#000",panel:"rgba(255,80,20,.15)",accent:"#ffd08a",key1:"#ffb347",key2:"#b31300",text:"#260500",glow:"#ff3c00",sound:"lava"},
@@ -631,6 +715,21 @@
       cyber:{label:"💻 Cyber Blue",cost:220,bg1:"#020014",bg2:"#000",panel:"rgba(90,120,255,.13)",accent:"#b9c7ff",key1:"#adbaff",key2:"#2438c9",text:"#04091f",glow:"#6d7cff",sound:"cyber"}
     };
 
+
+    const soundFiles = {
+      honey: "sounds/honey.mp3",
+      neon: "sounds/neon.mp3",
+      glass: "sounds/glass.mp3",
+      galaxy: "sounds/galaxy.mp3",
+      strawberry: "sounds/strawberry.mp3",
+      void: "sounds/void.mp3",
+      toxic: "sounds/toxic.mp3",
+      lava: "sounds/lava.mp3",
+      ocean: "sounds/ocean.mp3",
+      candy: "sounds/candy.mp3"
+    };
+
+    const soundCache = {};
     const scoreEl = document.getElementById("score");
     const comboEl = document.getElementById("combo");
     const gemsEl = document.getElementById("gems");
@@ -653,6 +752,10 @@
     let ownedThemes = JSON.parse(localStorage.getItem("ownedThemes") || '["honey"]');
     let currentTheme = localStorage.getItem("theme") || "honey";
     let unlockedAchievements = JSON.parse(localStorage.getItem("achievements") || "[]");
+    let keyboardShape = localStorage.getItem("keyboardShape") || "classic";
+    let keyboardCustomColor = localStorage.getItem("keyboardCustomColor") || "";
+    let spinnerShape = localStorage.getItem("spinnerShape") || "classic";
+    let spinnerCustomColor = localStorage.getItem("spinnerCustomColor") || "";
 
     let combo = 0, target = "", mode = "combo", wordTarget = "", wordProgress = "", beeTargets = [], bonusTarget = "";
     let roundStartTime = Date.now();
@@ -690,6 +793,10 @@
       localStorage.setItem("theme",currentTheme);
       localStorage.setItem("ownedThemes",JSON.stringify(ownedThemes));
       localStorage.setItem("achievements",JSON.stringify(unlockedAchievements));
+      localStorage.setItem("keyboardShape",keyboardShape);
+      localStorage.setItem("keyboardCustomColor",keyboardCustomColor);
+      localStorage.setItem("spinnerShape",spinnerShape);
+      localStorage.setItem("spinnerCustomColor",spinnerCustomColor);
     }
 
     function addXP(amount) {
@@ -718,10 +825,109 @@
       document.documentElement.style.setProperty("--key2",t.key2);
       document.documentElement.style.setProperty("--keyText",t.text);
       document.documentElement.style.setProperty("--glow",t.glow);
+      if (keyboardCustomColor) {
+        document.documentElement.style.setProperty("--key1",keyboardCustomColor);
+        document.documentElement.style.setProperty("--accent",keyboardCustomColor);
+        document.documentElement.style.setProperty("--glow",keyboardCustomColor);
+      }
       save();
     }
 
-    function playSound(kind) {
+
+    function applyKeyboardShape() {
+      const keyboard = document.getElementById("keyboard");
+      keyboard.classList.remove("keyboard-shape-rounded","keyboard-shape-square","keyboard-shape-pill","keyboard-shape-diamond");
+      if (keyboardShape !== "classic") keyboard.classList.add("keyboard-shape-" + keyboardShape);
+    }
+
+    function setKeyboardShape(shape) {
+      keyboardShape = shape;
+      applyKeyboardShape();
+      save();
+    }
+
+    function setKeyboardColor(color) {
+      keyboardCustomColor = color;
+      document.documentElement.style.setProperty("--key1", color);
+      document.documentElement.style.setProperty("--accent", color);
+      document.documentElement.style.setProperty("--glow", color);
+      const picker = document.getElementById("keyboardColorWheel");
+      if (picker) picker.value = color;
+      save();
+    }
+
+    function resetKeyboardColor() {
+      keyboardCustomColor = "";
+      applyTheme(currentTheme);
+      save();
+    }
+
+    function applySpinnerShape() {
+      spinner.className = "";
+      if (spinnerShape !== "classic") spinner.classList.add(spinnerShape);
+    }
+
+    function setSpinnerShape(shape) {
+      spinnerShape = shape;
+      applySpinnerShape();
+      save();
+    }
+
+    function setSpinnerColor(color) {
+      spinnerCustomColor = color;
+      spinner.style.background =
+        "radial-gradient(circle at center,#fff 0 8%,transparent 9%)," +
+        "conic-gradient(from 0deg," + color + ",var(--key2),var(--glow)," + color + ")";
+      spinner.style.boxShadow = "inset 0 0 35px rgba(255,255,255,.45),0 0 70px " + color;
+      const picker = document.getElementById("spinnerColorWheel");
+      if (picker) picker.value = color;
+      save();
+    }
+
+    function resetSpinnerColor() {
+      spinnerCustomColor = "";
+      spinner.style.background =
+        "radial-gradient(circle at center,#fff 0 8%,transparent 9%)," +
+        "conic-gradient(from 0deg,var(--accent),var(--key2),var(--glow),var(--accent))";
+      spinner.style.boxShadow = "inset 0 0 35px rgba(255,255,255,.45),0 0 70px var(--glow)";
+      save();
+    }
+
+    function applyCustomizers() {
+      applyKeyboardShape();
+      applySpinnerShape();
+
+      if (keyboardCustomColor) setKeyboardColor(keyboardCustomColor);
+      if (spinnerCustomColor) setSpinnerColor(spinnerCustomColor);
+
+      const keyboardPicker = document.getElementById("keyboardColorWheel");
+      const spinnerPicker = document.getElementById("spinnerColorWheel");
+      if (keyboardPicker && keyboardCustomColor) keyboardPicker.value = keyboardCustomColor;
+      if (spinnerPicker && spinnerCustomColor) spinnerPicker.value = spinnerCustomColor;
+    }
+
+    function preloadSounds() {
+      Object.entries(soundFiles).forEach(([name, src]) => {
+        const audio = new Audio(src);
+        audio.preload = "auto";
+        audio.volume = 0.72;
+        soundCache[name] = audio;
+      });
+    }
+
+    function playThemeAudio(sound) {
+      const cached = soundCache[sound];
+      if (!cached) return false;
+
+      const hit = cached.cloneNode();
+      hit.volume = 0.72 + (Math.random() * 0.08 - 0.04);
+      hit.playbackRate = 0.96 + Math.random() * 0.08;
+
+      hit.play().catch(() => playFallbackSound(sound));
+      return true;
+    }
+
+    function playFallbackSound(kind) {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx.state === "suspended") audioCtx.resume();
 
@@ -734,7 +940,7 @@
         neon:["square",760,280,.075,.12],
         glass:["triangle",1100,690,.11,.14],
         galaxy:["sine",470,880,.16,.13],
-        pop:["triangle",420,190,.095,.16],
+        strawberry:["triangle",420,190,.095,.16],
         void:["sawtooth",130,55,.18,.10],
         toxic:["square",290,470,.10,.13],
         lava:["sawtooth",180,75,.18,.14],
@@ -761,6 +967,17 @@
       gain.connect(audioCtx.destination);
       osc.start(now);
       osc.stop(now+s[3]);
+    }
+
+    function playSound(kind) {
+      const sound = kind || themes[currentTheme].sound;
+
+      if (soundFiles[sound]) {
+        playThemeAudio(sound);
+        return;
+      }
+
+      playFallbackSound(sound);
     }
 
     function particles(amount=14) {
@@ -1105,11 +1322,6 @@
       document.getElementById("spinnerArea").classList.remove("hidden");
     }
 
-    function setSpinnerShape(shape) {
-      spinner.className = "";
-      if (shape !== "classic") spinner.classList.add(shape);
-    }
-
     let spinAngle=0, spinVelocity=0, dragging=false, lastX=0, lastTime=Date.now();
 
     spinner.addEventListener("pointerdown",e=>{
@@ -1147,7 +1359,9 @@
       requestAnimationFrame(spinLoop);
     }
 
+    preloadSounds();
     applyTheme(currentTheme);
+    applyCustomizers();
     updateUI();
     checkAchievements();
     openSection("games");
