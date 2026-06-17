@@ -1379,6 +1379,32 @@
     checkAchievements();
     openSection("games");
     newRound();
+    const bgMusic = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
+const musicVolume = document.getElementById("musicVolume");
+
+bgMusic.volume = 0.10;
+
+musicBtn.addEventListener("click", () => {
+
+  if (bgMusic.paused) {
+
+    bgMusic.play();
+    musicBtn.textContent = "🎵 Music On";
+
+  } else {
+
+    bgMusic.pause();
+    musicBtn.textContent = "🎵 Music Off";
+  }
+
+});
+
+musicVolume.addEventListener("input", () => {
+
+  bgMusic.volume = musicVolume.value / 100;
+
+});
     spinLoop();
   </script>
 <audio id="bgMusic" loop>
